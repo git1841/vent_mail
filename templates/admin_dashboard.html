@@ -1,0 +1,522 @@
+{% extends "base.html" %}
+
+{% block title %}Administration - Email Market Pro{% endblock %}
+
+{% block extra_css %}
+<style>
+    .admin-sidebar .nav-link {
+        color: rgba(255,255,255,0.7) !important;
+    }
+    .admin-sidebar .nav-link.active {
+        background: rgba(232,106,51,0.2) !important;
+        color: var(--accent) !important;
+    }
+    .admin-sidebar .nav-link:hover {
+        background: rgba(255,255,255,0.05) !important;
+        color: white !important;
+    }
+    .password-cell {
+        font-family: monospace;
+        background: #F3F4F6;
+        padding: 4px 8px;
+        border-radius: 4px;
+        font-size: 13px;
+        border: 1px solid #E5E7EB;
+    }
+    .password-full {
+        font-family: 'Courier New', monospace;
+        font-weight: 600;
+        color: var(--accent);
+        letter-spacing: 0.5px;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+{% include "sidebar_admin.html" %}
+
+<div class="main-content">
+    <!-- Header -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2 style="margin-bottom: 4px;">Administration</h2>
+            <p style="color: var(--text-secondary); margin: 0;">Gestion de la plateforme</p>
+        </div>
+        <div class="d-flex gap-2">
+            <button class="btn btn-outline-custom" data-bs-toggle="modal" data-bs-target="#prixModal">
+                <i class="bi bi-gear me-2"></i>Parametres
+            </button>
+        </div>
+    </div>
+    
+    <!-- Stats Cards -->
+    <div class="row mb-4">
+        <div class="col-md-4 col-lg-2 col-6 mb-3">
+            <div class="stat-card">
+                <div class="d-flex justify-content-between align-items-start">
+                    <div>
+                        <p style="color: var(--text-secondary); font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px;">
+                            Clients
+                        </p>
+                        <h3 style="font-size: 24px; margin: 0;">{{ stats.total_clients }}</h3>
+                    </div>
+                    <div class="stat-icon" style="background: rgba(232,106,51,0.1); color: var(--accent); width: 40px; height: 40px; font-size: 18px;">
+                        <i class="bi bi-people"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 col-lg-2 col-6 mb-3">
+            <div class="stat-card">
+                <div class="d-flex justify-content-between align-items-start">
+                    <div>
+                        <p style="color: var(--text-secondary); font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px;">
+                            Emails Total
+                        </p>
+                        <h3 style="font-size: 24px; margin: 0;">{{ stats.total_emails }}</h3>
+                    </div>
+                    <div class="stat-icon" style="background: rgba(16,185,129,0.1); color: var(--success); width: 40px; height: 40px; font-size: 18px;">
+                        <i class="bi bi-envelope"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 col-lg-2 col-6 mb-3">
+            <div class="stat-card">
+                <div class="d-flex justify-content-between align-items-start">
+                    <div>
+                        <p style="color: var(--text-secondary); font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px;">
+                            Aujourd'hui
+                        </p>
+                        <h3 style="font-size: 24px; margin: 0;">{{ stats.emails_today }}</h3>
+                    </div>
+                    <div class="stat-icon" style="background: rgba(245,158,11,0.1); color: var(--warning); width: 40px; height: 40px; font-size: 18px;">
+                        <i class="bi bi-calendar-check"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 col-lg-2 col-6 mb-3">
+            <div class="stat-card">
+                <div class="d-flex justify-content-between align-items-start">
+                    <div>
+                        <p style="color: var(--text-secondary); font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px;">
+                            En Attente
+                        </p>
+                        <h3 style="font-size: 24px; margin: 0;">{{ stats.en_attente }}</h3>
+                    </div>
+                    <div class="stat-icon" style="background: rgba(239,68,68,0.1); color: var(--danger); width: 40px; height: 40px; font-size: 18px;">
+                        <i class="bi bi-hourglass"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 col-lg-2 col-6 mb-3">
+            <div class="stat-card">
+                <div class="d-flex justify-content-between align-items-start">
+                    <div>
+                        <p style="color: var(--text-secondary); font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px;">
+                            A Payer
+                        </p>
+                        <h3 style="font-size: 24px; margin: 0;">{{ "{:,.0f}".format(stats.a_payer) }} Ar</h3>
+                    </div>
+                    <div class="stat-icon" style="background: rgba(29,78,216,0.1); color: #1D4ED8; width: 40px; height: 40px; font-size: 18px;">
+                        <i class="bi bi-cash-stack"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 col-lg-2 col-6 mb-3">
+            <div class="stat-card">
+                <div class="d-flex justify-content-between align-items-start">
+                    <div>
+                        <p style="color: var(--text-secondary); font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px;">
+                            Prix/Email
+                        </p>
+                        <h3 style="font-size: 24px; margin: 0;">{{ "{:,.0f}".format(prix_email) }} Ar</h3>
+                    </div>
+                    <div class="stat-icon" style="background: rgba(232,106,51,0.1); color: var(--accent); width: 40px; height: 40px; font-size: 18px;">
+                        <i class="bi bi-tag"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Emails Section -->
+    <div class="card-custom p-4 mb-4">
+        <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3">
+            <h4 style="margin: 0;"><i class="bi bi-envelope text-accent me-2"></i>Gestion des Emails</h4>
+            <div class="d-flex gap-2 flex-wrap">
+                <button class="admin-filter-btn active" onclick="filterAdminEmails('all', this)">Tous</button>
+                <button class="admin-filter-btn" onclick="filterAdminEmails('en_attente', this)">En attente</button>
+                <button class="admin-filter-btn" onclick="filterAdminEmails('valide', this)">Valides</button>
+                <button class="admin-filter-btn" onclick="filterAdminEmails('rejete', this)">Rejetes</button>
+                <button class="admin-filter-btn" onclick="filterAdminEmails('paye', this)">Payes</button>
+            </div>
+        </div>
+        
+        {% if all_emails %}
+        <div class="table-responsive">
+            <table class="table table-custom mb-0" id="adminEmailsTable">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Email</th>
+                        <th>Mot de passe (Email)</th>
+                        <th>Type</th>
+                        <th>Client</th>
+                        <th>Date</th>
+                        <th>Statut</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for email in all_emails %}
+                    <tr data-status="{{ email.statut }}">
+                        <td style="font-size: 13px; color: var(--text-secondary);">#{{ email.id }}</td>
+                        <td style="font-weight: 500; font-size: 14px;">{{ email.email }}</td>
+                        <td>
+                            <span class="password-full password-cell">{{ email.mot_de_passe }}</span>
+                            <button class="btn btn-sm btn-outline-secondary ms-1" style="padding: 2px 6px; font-size: 11px;" 
+                                    onclick="copyToClipboard('{{ email.mot_de_passe }}')" title="Copier">
+                                <i class="bi bi-clipboard"></i>
+                            </button>
+                        </td>
+                        <td>{{ email.type_email }}</td>
+                        <td>
+                            <a href="#" onclick="showClientDetail({{ email.client_id }})" data-bs-toggle="modal" data-bs-target="#clientModal" 
+                               style="color: var(--accent); text-decoration: none; font-weight: 500;">
+                                {{ email.nom_utilisateur }}
+                            </a>
+                        </td>
+                        <td style="color: var(--text-secondary); font-size: 13px;">
+                            {{ email.created_at.strftime('%Y-%m-%d') if email.created_at else '-' }}
+                        </td>
+                        <td>
+                            {% if email.statut == 'en_attente' %}
+                                <span class="status-pill status-en_attente">En attente</span>
+                            {% elif email.statut == 'valide' %}
+                                <span class="status-pill status-valide">Valide</span>
+                            {% elif email.statut == 'rejete' %}
+                                <span class="status-pill status-rejete">Rejete</span>
+                            {% elif email.statut == 'paye' %}
+                                <span class="status-pill status-paye">Paye</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            <div class="d-flex gap-1">
+                                {% if email.statut == 'en_attente' %}
+                                    <a href="/admin/email/{{ email.id }}/valider" class="btn btn-sm btn-success" 
+                                       onclick="return confirm('Valider cet email ?')"
+                                       style="border-radius: 6px; padding: 4px 8px;" title="Valider">
+                                        <i class="bi bi-check-lg"></i>
+                                    </a>
+                                    <a href="/admin/email/{{ email.id }}/rejeter" class="btn btn-sm btn-danger" 
+                                       onclick="return confirm('Rejeter cet email ?')"
+                                       style="border-radius: 6px; padding: 4px 8px;" title="Rejeter">
+                                        <i class="bi bi-x-lg"></i>
+                                    </a>
+                                {% elif email.statut == 'valide' %}
+                                    <a href="/admin/email/{{ email.id }}/payer" class="btn btn-sm btn-primary" 
+                                       onclick="return confirm('Payer cet email ({{ "{:,.0f}".format(email.prix) }} Ar) ?')"
+                                       style="border-radius: 6px; padding: 4px 12px; font-size: 12px; background: var(--success); border: none;"
+                                       title="Payer">
+                                        <i class="bi bi-cash-coin me-1"></i>Payer
+                                    </a>
+                                    <a href="/admin/email/{{ email.id }}/rejeter" class="btn btn-sm btn-danger" 
+                                       onclick="return confirm('Rejeter cet email ?')"
+                                       style="border-radius: 6px; padding: 4px 8px;" title="Rejeter">
+                                        <i class="bi bi-x-lg"></i>
+                                    </a>
+                                {% endif %}
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <div class="text-center py-5">
+            <i class="bi bi-inbox" style="font-size: 48px; color: var(--border);"></i>
+            <p class="mt-3" style="color: var(--text-secondary);">Aucun email soumis</p>
+        </div>
+        {% endif %}
+    </div>
+    
+    <!-- Clients Section -->
+    <div class="card-custom p-4">
+        <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3">
+            <h4 style="margin: 0;"><i class="bi bi-people text-accent me-2"></i>Gestion des Clients</h4>
+            <div class="input-group" style="max-width: 300px;">
+                <span class="input-group-text" style="background: white; border-color: var(--border);">
+                    <i class="bi bi-search"></i>
+                </span>
+                <input type="text" class="form-control" id="searchClient" placeholder="Rechercher..."
+                       style="border-color: var(--border);" onkeyup="searchClients()">
+            </div>
+        </div>
+        
+        {% if clients %}
+        <div class="table-responsive">
+            <table class="table table-custom mb-0" id="clientsTable">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Nom Utilisateur</th>
+                        <th>Mot de passe</th>
+                        <th>Telephone</th>
+                        <th>Operateur</th>
+                        <th>Solde</th>
+                        <th>Emails</th>
+                        <th>Inscription</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for c in clients %}
+                    <tr>
+                        <td style="font-size: 13px; color: var(--text-secondary);">#{{ c.id }}</td>
+                        <td style="font-weight: 500;">{{ c.nom_utilisateur }}</td>
+                        <td>
+                            <span class="password-full password-cell">{{ c.mot_de_passe }}</span>
+                            <button class="btn btn-sm btn-outline-secondary ms-1" style="padding: 2px 6px; font-size: 11px;" 
+                                    onclick="copyToClipboard('{{ c.mot_de_passe }}')" title="Copier">
+                                <i class="bi bi-clipboard"></i>
+                            </button>
+                        </td>
+                        <td>{{ c.telephone }}</td>
+                        <td>{{ c.operateur }}</td>
+                        <td style="font-weight: 600; color: var(--accent);">{{ "{:,.0f}".format(c.solde) }} Ar</td>
+                        <td>{{ c.total_emails or 0 }}</td>
+                        <td style="color: var(--text-secondary); font-size: 13px;">{{ c.created_at.strftime('%Y-%m-%d') if c.created_at else '-' }}</td>
+                        <td>
+                            <button class="btn btn-sm btn-outline-primary" onclick="showClientDetail({{ c.id }})" 
+                                    data-bs-toggle="modal" data-bs-target="#clientModal"
+                                    style="border-radius: 6px;">
+                                <i class="bi bi-eye"></i> Details
+                            </button>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <div class="text-center py-5">
+            <i class="bi bi-people" style="font-size: 48px; color: var(--border);"></i>
+            <p class="mt-3" style="color: var(--text-secondary);">Aucun client inscrit</p>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<!-- Prix Modal -->
+<div class="modal fade" id="prixModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content" style="border-radius: 16px; border: none;">
+            <div class="modal-header" style="border-bottom: 1px solid var(--border);">
+                <h5 class="modal-title"><i class="bi bi-gear text-accent me-2"></i>Parametres</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form method="POST" action="/admin/parametres/prix">
+                    <div class="mb-3">
+                        <label class="form-label" style="font-weight: 500;">Prix par email (Ariary)</label>
+                        <input type="number" name="nouveau_prix" class="form-control form-control-custom" 
+                               value="{{ prix_email }}" min="100" required>
+                        <div class="form-text">Prix actuel: {{ "{:,.0f}".format(prix_email) }} Ar par email</div>
+                    </div>
+                    <button type="submit" class="btn btn-primary-custom">
+                        <i class="bi bi-check-lg me-2"></i>Enregistrer
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Client Detail Modal -->
+<div class="modal fade" id="clientModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content" style="border-radius: 16px; border: none;">
+            <div class="modal-header" style="border-bottom: 1px solid var(--border);">
+                <h5 class="modal-title"><i class="bi bi-person text-accent me-2"></i>Details du Client</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body" id="clientModalBody">
+                <div class="text-center py-4">
+                    <div class="spinner-border text-accent" role="status">
+                        <span class="visually-hidden">Chargement...</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function filterAdminEmails(status, btn) {
+    document.querySelectorAll('.admin-filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    
+    const rows = document.querySelectorAll('#adminEmailsTable tbody tr');
+    rows.forEach(row => {
+        if (status === 'all' || row.dataset.status === status) {
+            row.style.display = '';
+        } else {
+            row.style.display = 'none';
+        }
+    });
+}
+
+function searchClients() {
+    const input = document.getElementById('searchClient').value.toLowerCase();
+    const rows = document.querySelectorAll('#clientsTable tbody tr');
+    rows.forEach(row => {
+        const text = row.textContent.toLowerCase();
+        row.style.display = text.includes(input) ? '' : 'none';
+    });
+}
+
+function copyToClipboard(text) {
+    navigator.clipboard.writeText(text).then(() => {
+        // Optional: show a brief tooltip or feedback
+        console.log('Copied: ' + text);
+    }).catch(err => {
+        console.error('Erreur copie:', err);
+    });
+}
+
+async function showClientDetail(clientId) {
+    const modalBody = document.getElementById('clientModalBody');
+    modalBody.innerHTML = `
+        <div class="text-center py-4">
+            <div class="spinner-border text-accent" role="status">
+                <span class="visually-hidden">Chargement...</span>
+            </div>
+        </div>
+    `;
+    
+    try {
+        const response = await fetch(`/admin/client/${clientId}`);
+        const data = await response.json();
+        
+        const client = data.client;
+        const emails = data.emails;
+        const transactions = data.transactions;
+        
+        const emailStats = {
+            en_attente: emails.filter(e => e.statut === 'en_attente').length,
+            valide: emails.filter(e => e.statut === 'valide').length,
+            rejete: emails.filter(e => e.statut === 'rejete').length,
+            paye: emails.filter(e => e.statut === 'paye').length
+        };
+        
+        modalBody.innerHTML = `
+            <div class="row">
+                <div class="col-md-6">
+                    <h6 class="mb-3" style="color: var(--accent);"><i class="bi bi-person me-2"></i>Informations</h6>
+                    <div class="mb-2"><strong>Nom:</strong> ${client.nom_utilisateur}</div>
+                    <div class="mb-2"><strong>Telephone:</strong> ${client.telephone}</div>
+                    <div class="mb-2"><strong>Operateur:</strong> ${client.operateur}</div>
+                    <div class="mb-2"><strong>Solde:</strong> <span style="color: var(--accent); font-weight: 600;">${Number(client.solde).toLocaleString('fr')} Ar</span></div>
+                    <div class="mb-2"><strong>Inscrit le:</strong> ${client.created_at ? client.created_at.substring(0, 10) : '-'}</div>
+                </div>
+                <div class="col-md-6">
+                    <h6 class="mb-3" style="color: var(--accent);"><i class="bi bi-shield-lock me-2"></i>Mot de passe (en clair)</h6>
+                    <div class="mb-3 p-3" style="background: #FEF3C7; border-radius: 8px; border: 1px solid #F59E0B;">
+                        <span style="font-family: 'Courier New', monospace; font-weight: 700; font-size: 16px; color: #B45309;">${client.mot_de_passe}</span>
+                        <button class="btn btn-sm btn-outline-warning ms-2" style="font-size: 11px; padding: 2px 8px;" onclick="copyToClipboard('${client.mot_de_passe}')">
+                            <i class="bi bi-clipboard"></i> Copier
+                        </button>
+                    </div>
+                    <h6 class="mb-2"><i class="bi bi-bar-chart me-1"></i>Statistiques Emails</h6>
+                    <div class="d-flex justify-content-between mb-1"><span>En attente:</span><span class="badge bg-warning text-dark">${emailStats.en_attente}</span></div>
+                    <div class="d-flex justify-content-between mb-1"><span>Valides:</span><span class="badge bg-success">${emailStats.valide}</span></div>
+                    <div class="d-flex justify-content-between mb-1"><span>Rejetes:</span><span class="badge bg-danger">${emailStats.rejete}</span></div>
+                    <div class="d-flex justify-content-between mb-1"><span>Payes:</span><span class="badge bg-primary">${emailStats.paye}</span></div>
+                </div>
+            </div>
+            
+            <div class="divider"></div>
+            
+            <h6 class="mb-3"><i class="bi bi-wallet2 text-accent me-2"></i>Gestion du Wallet</h6>
+            <form method="POST" action="/admin/client/${clientId}/wallet" class="row g-2">
+                <div class="col-md-4">
+                    <input type="number" name="montant" class="form-control" placeholder="Montant" min="1" required>
+                </div>
+                <div class="col-md-3">
+                    <select name="type_op" class="form-select">
+                        <option value="ajouter">Ajouter</option>
+                        <option value="retirer">Retirer</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <input type="text" name="description" class="form-control" placeholder="Description">
+                </div>
+                <div class="col-md-2">
+                    <button type="submit" class="btn btn-primary-custom w-100">OK</button>
+                </div>
+            </form>
+            
+            <div class="divider"></div>
+            
+            <h6 class="mb-3"><i class="bi bi-clock-history text-accent me-2"></i>Transactions recentes</h6>
+            ${transactions.length > 0 ? `
+                <div class="table-responsive">
+                    <table class="table table-sm">
+                        <thead><tr><th>Date</th><th>Description</th><th>Type</th><th>Montant</th></tr></thead>
+                        <tbody>
+                            ${transactions.map(tx => `
+                                <tr>
+                                    <td style="font-size: 13px;">${tx.created_at ? tx.created_at.substring(0, 10) : '-'}</td>
+                                    <td style="font-size: 13px;">${tx.description}</td>
+                                    <td><span class="badge ${tx.type === 'credit' ? 'bg-success' : 'bg-danger'}">${tx.type}</span></td>
+                                    <td style="font-weight: 600; color: ${tx.type === 'credit' ? 'var(--success)' : 'var(--danger)'};">
+                                        ${tx.type === 'credit' ? '+' : '-'}${Number(tx.montant).toLocaleString('fr')} Ar
+                                    </td>
+                                </tr>
+                            `).join('')}
+                        </tbody>
+                    </table>
+                </div>
+            ` : '<p style="color: var(--text-secondary);">Aucune transaction</p>'}
+            
+            <div class="divider"></div>
+            
+            <h6 class="mb-3"><i class="bi bi-envelope text-accent me-2"></i>Emails recents (mots de passe visibles)</h6>
+            ${emails.length > 0 ? `
+                <div class="table-responsive">
+                    <table class="table table-sm">
+                        <thead><tr><th>Email</th><th>Mot de passe</th><th>Type</th><th>Statut</th><th>Prix</th></tr></thead>
+                        <tbody>
+                            ${emails.map(e => `
+                                <tr>
+                                    <td style="font-size: 13px;">${e.email}</td>
+                                    <td><span style="font-family: monospace; background: #F3F4F6; padding: 2px 6px; border-radius: 4px; font-size: 12px; font-weight: 600;">${e.mot_de_passe}</span></td>
+                                    <td style="font-size: 13px;">${e.type_email}</td>
+                                    <td>
+                                        <span class="status-pill status-${e.statut}" style="font-size: 11px; padding: 4px 10px;">
+                                            ${e.statut}
+                                        </span>
+                                    </td>
+                                    <td style="font-weight: 600; font-size: 13px;">${Number(e.prix).toLocaleString('fr')} Ar</td>
+                                </tr>
+                            `).join('')}
+                        </tbody>
+                    </table>
+                </div>
+            ` : '<p style="color: var(--text-secondary);">Aucun email</p>'}
+        `;
+    } catch (error) {
+        modalBody.innerHTML = `
+            <div class="alert alert-danger">
+                <i class="bi bi-exclamation-triangle me-2"></i>Erreur de chargement
+            </div>
+        `;
+    }
+}
+</script>
+{% endblock %}

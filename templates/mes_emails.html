@@ -1,0 +1,115 @@
+{% extends "base.html" %}
+
+{% block title %}Mes Emails - Email Market Pro{% endblock %}
+
+{% block content %}
+{% include "sidebar_client.html" %}
+
+<div class="main-content">
+    <!-- Header -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2 style="margin-bottom: 4px;">Mes Emails</h2>
+            <p style="color: var(--text-secondary); margin: 0;">Historique complet de vos soumissions</p>
+        </div>
+        <a href="/emails/add" class="btn btn-primary-custom">
+            <i class="bi bi-plus-lg me-2"></i>Ajouter des emails
+        </a>
+    </div>
+    
+    <!-- Filter Tabs -->
+    <div class="card-custom p-3 mb-4">
+        <div class="d-flex gap-2 flex-wrap">
+            <button class="admin-filter-btn active" onclick="filterEmails('all', this)">Tous</button>
+            <button class="admin-filter-btn" onclick="filterEmails('en_attente', this)">
+                <i class="bi bi-hourglass-split me-1"></i>En attente
+            </button>
+            <button class="admin-filter-btn" onclick="filterEmails('valide', this)">
+                <i class="bi bi-check-circle me-1"></i>Valides
+            </button>
+            <button class="admin-filter-btn" onclick="filterEmails('rejete', this)">
+                <i class="bi bi-x-circle me-1"></i>Rejetes
+            </button>
+            <button class="admin-filter-btn" onclick="filterEmails('paye', this)">
+                <i class="bi bi-cash-coin me-1"></i>Payes
+            </button>
+        </div>
+    </div>
+    
+    <!-- Emails Table -->
+    <div class="card-custom p-4">
+        {% if emails %}
+        <div class="table-responsive">
+            <table class="table table-custom mb-0" id="emailsTable">
+                <thead>
+                    <tr>
+                        <th>Email</th>
+                        <th>Type</th>
+                        <th>Date</th>
+                        <th>Statut</th>
+                        <th>Prix</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for email in emails %}
+                    <tr data-status="{{ email.statut }}">
+                        <td style="font-weight: 500;">{{ email.email }}</td>
+                        <td>{{ email.type_email }}</td>
+                        <td style="color: var(--text-secondary); font-size: 14px;">
+                            {{ email.created_at.strftime('%Y-%m-%d') if email.created_at else '-' }}
+                        </td>
+                        <td>
+                            {% if email.statut == 'en_attente' %}
+                                <span class="status-pill status-en_attente">
+                                    <i class="bi bi-hourglass-split"></i>En attente
+                                </span>
+                            {% elif email.statut == 'valide' %}
+                                <span class="status-pill status-valide">
+                                    <i class="bi bi-check-circle"></i>Valide
+                                </span>
+                            {% elif email.statut == 'rejete' %}
+                                <span class="status-pill status-rejete">
+                                    <i class="bi bi-x-circle"></i>Rejete
+                                </span>
+                            {% elif email.statut == 'paye' %}
+                                <span class="status-pill status-paye">
+                                    <i class="bi bi-cash-coin"></i>Paye
+                                </span>
+                            {% endif %}
+                        </td>
+                        <td style="font-weight: 600;">{{ "{:,.0f}".format(email.prix) }} Ar</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <div class="text-center py-5">
+            <i class="bi bi-inbox" style="font-size: 48px; color: var(--border);"></i>
+            <p class="mt-3" style="color: var(--text-secondary);">Aucun email soumis</p>
+            <a href="/emails/add" class="btn btn-primary-custom mt-2">
+                <i class="bi bi-plus-lg me-2"></i>Ajouter votre premier email
+            </a>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<script>
+function filterEmails(status, btn) {
+    // Update active button
+    document.querySelectorAll('.admin-filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    
+    // Filter table rows
+    const rows = document.querySelectorAll('#emailsTable tbody tr');
+    rows.forEach(row => {
+        if (status === 'all' || row.dataset.status === status) {
+            row.style.display = '';
+        } else {
+            row.style.display = 'none';
+        }
+    });
+}
+</script>
+{% endblock %}

@@ -1,0 +1,251 @@
+{% extends "base.html" %}
+
+{% block title %}Email Market Pro - Vendez vos emails{% endblock %}
+
+{% block content %}
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg" style="background: var(--bg-dark);">
+    <div class="container">
+        <a class="navbar-brand" href="/" style="font-family: 'Playfair Display', serif; color: white; font-size: 24px;">
+            <i class="bi bi-envelope-fill text-accent me-2"></i>Email Market Pro
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon" style="filter: invert(1);"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto align-items-center">
+                <li class="nav-item">
+                    <a class="nav-link" href="#comment-ca-marche" style="color: rgba(255,255,255,0.8);">Comment ca marche</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#tarifs" style="color: rgba(255,255,255,0.8);">Tarifs</a>
+                </li>
+                <li class="nav-item ms-lg-3">
+                    {% if client %}
+                        <a href="/dashboard" class="btn btn-primary-custom">
+                            <i class="bi bi-speedometer2 me-2"></i>Mon Tableau de Bord
+                        </a>
+                    {% else %}
+                        <a href="/login" class="btn btn-primary-custom">
+                            <i class="bi bi-box-arrow-in-right me-2"></i>Connexion
+                        </a>
+                    {% endif %}
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<!-- Hero Section -->
+<section class="hero-section">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-6">
+                <h1 style="font-size: 48px; line-height: 1.2; margin-bottom: 24px;">
+                    Vendez vos comptes <span style="color: var(--accent);">emails</span> en toute securite
+                </h1>
+                <p style="font-size: 18px; color: rgba(255,255,255,0.7); margin-bottom: 32px;">
+                    La premiere plateforme malgache d'achat et vente de comptes emails. 
+                    Gagnez de l'argent avec vos emails inutilises.
+                </p>
+                <div class="d-flex gap-3 flex-wrap">
+                    <a href="/register" class="btn btn-primary-custom btn-lg">
+                        <i class="bi bi-person-plus me-2"></i>Commencer maintenant
+                    </a>
+                    <a href="#comment-ca-marche" class="btn btn-outline-light btn-lg">
+                        <i class="bi bi-info-circle me-2"></i>En savoir plus
+                    </a>
+                </div>
+            </div>
+            <div class="col-lg-6 text-center mt-5 mt-lg-0">
+                <div style="background: rgba(255,255,255,0.05); border-radius: 24px; padding: 48px;">
+                    <i class="bi bi-envelope-check" style="font-size: 120px; color: var(--accent);"></i>
+                    <div class="mt-4" style="background: rgba(232,106,51,0.2); border-radius: 12px; padding: 20px;">
+                        <p class="mb-1" style="color: rgba(255,255,255,0.7); font-size: 14px;">Prix actuel par email</p>
+                        <h2 style="color: var(--accent); margin: 0;">{{ "{:,.0f}".format(prix_email) }} Ar</h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Stats Bar -->
+<section style="background: white; padding: 40px 0; border-bottom: 1px solid var(--border);">
+    <div class="container">
+        <div class="row text-center">
+            <div class="col-md-3 col-6 mb-3 mb-md-0">
+                <h3 style="color: var(--accent); font-size: 32px;">500+</h3>
+                <p style="color: var(--text-secondary); margin: 0;">Emails achetes</p>
+            </div>
+            <div class="col-md-3 col-6 mb-3 mb-md-0">
+                <h3 style="color: var(--accent); font-size: 32px;">100+</h3>
+                <p style="color: var(--text-secondary); margin: 0;">Vendeurs actifs</p>
+            </div>
+            <div class="col-md-3 col-6">
+                <h3 style="color: var(--accent); font-size: 32px;">2M+</h3>
+                <p style="color: var(--text-secondary); margin: 0;">Ar payes</p>
+            </div>
+            <div class="col-md-3 col-6">
+                <h3 style="color: var(--accent); font-size: 32px;">24h</h3>
+                <p style="color: var(--text-secondary); margin: 0;">Validation</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- How it Works -->
+<section id="comment-ca-marche" style="padding: 80px 0;">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 style="font-size: 36px; margin-bottom: 16px;">Comment ca marche ?</h2>
+            <p style="color: var(--text-secondary); font-size: 18px;">3 etapes simples pour vendre vos emails</p>
+        </div>
+        <div class="row">
+            <div class="col-md-4 mb-4">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="bi bi-upload"></i>
+                    </div>
+                    <h4 style="margin-bottom: 12px;">1. Soumettez vos emails</h4>
+                    <p style="color: var(--text-secondary);">
+                        Connectez-vous et soumettez vos comptes emails avec leur mot de passe. 
+                        Supporte Gmail, Yahoo, Outlook et plus.
+                    </p>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="bi bi-check-circle"></i>
+                    </div>
+                    <h4 style="margin-bottom: 12px;">2. Validation par l'admin</h4>
+                    <p style="color: var(--text-secondary);">
+                        Notre equipe verifie la validite de chaque compte email soumis. 
+                        Processus rapide en moins de 24 heures.
+                    </p>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="bi bi-cash-stack"></i>
+                    </div>
+                    <h4 style="margin-bottom: 12px;">3. Recevez l'argent</h4>
+                    <p style="color: var(--text-secondary);">
+                        Une fois valide, l'argent est ajoute a votre portefeuille. 
+                        Retirez via Mobile Money (Telma, Orange, Airtel).
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Pricing -->
+<section id="tarifs" style="padding: 80px 0; background: white;">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 style="font-size: 36px; margin-bottom: 16px;">Nos Tarifs</h2>
+            <p style="color: var(--text-secondary); font-size: 18px;">Prix transparent et fixe pour tous les types d'emails</p>
+        </div>
+        <div class="row justify-content-center">
+            <div class="col-md-6 col-lg-4">
+                <div style="background: var(--bg-primary); border-radius: 16px; padding: 40px; text-align: center; border: 2px solid var(--accent);">
+                    <div style="background: var(--accent); color: white; display: inline-block; padding: 8px 20px; border-radius: 1000px; font-size: 14px; font-weight: 600; margin-bottom: 20px;">
+                        PRIX UNIQUE
+                    </div>
+                    <h2 style="font-size: 48px; margin-bottom: 8px;">
+                        {{ "{:,.0f}".format(prix_email) }} <span style="font-size: 24px;">Ar</span>
+                    </h2>
+                    <p style="color: var(--text-secondary); margin-bottom: 32px;">par email valide</p>
+                    <ul style="list-style: none; padding: 0; text-align: left; margin-bottom: 32px;">
+                        <li style="padding: 8px 0; border-bottom: 1px solid var(--border);">
+                            <i class="bi bi-check-circle-fill text-accent me-2"></i>Gmail
+                        </li>
+                        <li style="padding: 8px 0; border-bottom: 1px solid var(--border);">
+                            <i class="bi bi-check-circle-fill text-accent me-2"></i>Yahoo
+                        </li>
+                        <li style="padding: 8px 0; border-bottom: 1px solid var(--border);">
+                            <i class="bi bi-check-circle-fill text-accent me-2"></i>Outlook
+                        </li>
+                        <li style="padding: 8px 0; border-bottom: 1px solid var(--border);">
+                            <i class="bi bi-check-circle-fill text-accent me-2"></i>Hotmail
+                        </li>
+                        <li style="padding: 8px 0;">
+                            <i class="bi bi-check-circle-fill text-accent me-2"></i>Autres services
+                        </li>
+                    </ul>
+                    <a href="/register" class="btn btn-primary-custom w-100">
+                        <i class="bi bi-arrow-right me-2"></i>Commencer
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Supported Operators -->
+<section style="padding: 60px 0;">
+    <div class="container">
+        <div class="text-center mb-4">
+            <h3 style="font-size: 24px;">Operateurs Mobile Money supportes</h3>
+        </div>
+        <div class="row justify-content-center">
+            <div class="col-md-3 col-6 text-center mb-3">
+                <div class="card-custom p-4">
+                    <i class="bi bi-phone" style="font-size: 36px; color: var(--accent);"></i>
+                    <h5 class="mt-2">Telma</h5>
+                </div>
+            </div>
+            <div class="col-md-3 col-6 text-center mb-3">
+                <div class="card-custom p-4">
+                    <i class="bi bi-phone" style="font-size: 36px; color: var(--accent);"></i>
+                    <h5 class="mt-2">Orange</h5>
+                </div>
+            </div>
+            <div class="col-md-3 col-6 text-center mb-3">
+                <div class="card-custom p-4">
+                    <i class="bi bi-phone" style="font-size: 36px; color: var(--accent);"></i>
+                    <h5 class="mt-2">Airtel</h5>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Footer -->
+<footer style="background: var(--bg-dark); color: white; padding: 40px 0;">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6">
+                <h4 style="font-family: 'Playfair Display', serif; margin-bottom: 16px;">
+                    <i class="bi bi-envelope-fill text-accent me-2"></i>Email Market Pro
+                </h4>
+                <p style="color: rgba(255,255,255,0.6);">
+                    La plateforme de reference pour l'achat et la vente de comptes emails a Madagascar.
+                </p>
+            </div>
+            <div class="col-md-3">
+                <h6 style="margin-bottom: 16px;">Liens rapides</h6>
+                <ul style="list-style: none; padding: 0;">
+                    <li><a href="/login" style="color: rgba(255,255,255,0.6); text-decoration: none;">Connexion</a></li>
+                    <li><a href="/register" style="color: rgba(255,255,255,0.6); text-decoration: none;">Inscription</a></li>
+                </ul>
+            </div>
+            <div class="col-md-3">
+                <h6 style="margin-bottom: 16px;">Operateurs</h6>
+                <ul style="list-style: none; padding: 0; color: rgba(255,255,255,0.6);">
+                    <li>Telma (034/038)</li>
+                    <li>Orange (032/037)</li>
+                    <li>Airtel (033/039)</li>
+                </ul>
+            </div>
+        </div>
+        <div class="divider" style="background: rgba(255,255,255,0.1); margin: 24px 0;"></div>
+        <div class="text-center" style="color: rgba(255,255,255,0.4);">
+            <p class="mb-0"> Email Market Pro - Tous droits reserves</p>
+        </div>
+    </div>
+</footer>
+{% endblock %}

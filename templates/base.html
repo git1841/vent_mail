@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Email Market Pro{% endblock %}</title>
+    
+    <!-- Bootstrap 5.3 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg-primary: #F6F3EE;
+            --bg-dark: #0B0F19;
+            --accent: #E86A33;
+            --accent-hover: #D55A2B;
+            --text-primary: #111827;
+            --text-secondary: #6B7280;
+            --border: #E5E7EB;
+            --success: #10B981;
+            --warning: #F59E0B;
+            --danger: #EF4444;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+        }
+        
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Playfair Display', serif;
+        }
+        
+        .text-accent {
+            color: var(--accent) !important;
+        }
+        
+        .bg-accent {
+            background-color: var(--accent) !important;
+        }
+        
+        .btn-primary-custom {
+            background-color: var(--accent);
+            border-color: var(--accent);
+            color: white;
+            border-radius: 8px;
+            padding: 12px 24px;
+            font-weight: 500;
+            transition: all 0.3s ease-in-out;
+        }
+        
+        .btn-primary-custom:hover {
+            background-color: var(--accent-hover);
+            border-color: var(--accent-hover);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(232, 106, 51, 0.3);
+            color: white;
+        }
+        
+        .btn-outline-custom {
+            border: 2px solid var(--accent);
+            color: var(--accent);
+            border-radius: 8px;
+            padding: 10px 22px;
+            font-weight: 500;
+            transition: all 0.3s ease-in-out;
+            background: transparent;
+        }
+        
+        .btn-outline-custom:hover {
+            background-color: rgba(232, 106, 51, 0.05);
+            color: var(--accent);
+        }
+        
+        .card-custom {
+            background: white;
+            border-radius: 12px;
+            border: none;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.06);
+            transition: all 0.3s ease-in-out;
+        }
+        
+        .card-custom:hover {
+            box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+        }
+        
+        .form-control-custom {
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 12px 16px;
+            transition: all 0.3s ease-in-out;
+        }
+        
+        .form-control-custom:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(232, 106, 51, 0.1);
+        }
+        
+        .status-pill {
+            padding: 6px 14px;
+            border-radius: 1000px;
+            font-size: 12px;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+        
+        .status-en_attente {
+            background: #FEF3C7;
+            color: #B45309;
+        }
+        
+        .status-valide {
+            background: #D1FAE5;
+            color: #047857;
+        }
+        
+        .status-rejete {
+            background: #FEE2E2;
+            color: #B91C1C;
+        }
+        
+        .status-paye {
+            background: #DBEAFE;
+            color: #1D4ED8;
+        }
+        
+        .sidebar {
+            width: 260px;
+            background: white;
+            border-right: 1px solid var(--border);
+            min-height: 100vh;
+            position: fixed;
+            left: 0;
+            top: 0;
+            z-index: 1000;
+            transition: all 0.3s ease-in-out;
+        }
+        
+        .sidebar .nav-link {
+            color: var(--text-secondary);
+            padding: 12px 20px;
+            margin: 4px 12px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.3s ease-in-out;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .sidebar .nav-link:hover {
+            background: rgba(232, 106, 51, 0.05);
+            color: var(--text-primary);
+        }
+        
+        .sidebar .nav-link.active {
+            background: rgba(232, 106, 51, 0.05);
+            color: var(--accent);
+            border-left: 4px solid var(--accent);
+        }
+        
+        .main-content {
+            margin-left: 260px;
+            padding: 32px;
+            min-height: 100vh;
+        }
+        
+        .stat-card {
+            background: white;
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.06);
+            transition: all 0.3s ease-in-out;
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+        }
+        
+        .stat-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+        }
+        
+        .toast-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 9999;
+        }
+        
+        .table-custom {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.06);
+        }
+        
+        .table-custom thead th {
+            background: #F9FAFB;
+            color: var(--text-secondary);
+            font-weight: 500;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            padding: 16px;
+            border: none;
+        }
+        
+        .table-custom tbody td {
+            padding: 16px;
+            border-bottom: 1px solid var(--border);
+            vertical-align: middle;
+        }
+        
+        .table-custom tbody tr:hover {
+            background: #F9FAFB;
+        }
+        
+        .fab-btn {
+            position: fixed;
+            bottom: 32px;
+            right: 32px;
+            background: var(--accent);
+            color: white;
+            border: none;
+            border-radius: 1000px;
+            padding: 16px 32px;
+            font-weight: 600;
+            box-shadow: 0 8px 24px rgba(232, 106, 51, 0.3);
+            transition: all 0.3s ease-in-out;
+            z-index: 100;
+        }
+        
+        .fab-btn:hover {
+            background: var(--accent-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 12px 32px rgba(232, 106, 51, 0.4);
+            color: white;
+        }
+        
+        .step-circle {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: rgba(232, 106, 51, 0.1);
+            color: var(--accent);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            margin: 0 auto 16px;
+        }
+        
+        @media (max-width: 991px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+            .sidebar.show {
+                transform: translateX(0);
+            }
+            .main-content {
+                margin-left: 0;
+            }
+        }
+        
+        .hero-section {
+            background: linear-gradient(135deg, var(--bg-dark) 0%, #1a1f2e 100%);
+            color: white;
+            padding: 80px 0;
+        }
+        
+        .feature-card {
+            background: white;
+            border-radius: 12px;
+            padding: 32px;
+            text-align: center;
+            transition: all 0.3s ease-in-out;
+            border: 1px solid var(--border);
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 32px rgba(0,0,0,0.1);
+            border-color: var(--accent);
+        }
+        
+        .feature-icon {
+            width: 64px;
+            height: 64px;
+            border-radius: 16px;
+            background: rgba(232, 106, 51, 0.1);
+            color: var(--accent);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            margin: 0 auto 20px;
+        }
+        
+        .divider {
+            height: 1px;
+            background: var(--border);
+            margin: 24px 0;
+        }
+        
+        .nav-tabs-custom .nav-link {
+            color: var(--text-secondary);
+            border: none;
+            border-bottom: 2px solid transparent;
+            padding: 12px 20px;
+            font-weight: 500;
+        }
+        
+        .nav-tabs-custom .nav-link.active {
+            color: var(--accent);
+            border-bottom-color: var(--accent);
+            background: none;
+        }
+        
+        .admin-filter-btn {
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 500;
+            border: none;
+            transition: all 0.3s ease-in-out;
+        }
+        
+        .admin-filter-btn.active {
+            background: var(--bg-dark);
+            color: white;
+        }
+        
+        .admin-filter-btn:not(.active) {
+            background: transparent;
+            color: var(--text-secondary);
+        }
+        
+        .admin-filter-btn:not(.active):hover {
+            background: rgba(0,0,0,0.05);
+        }
+    </style>
+    
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+    {% block content %}{% endblock %}
+    
+    <!-- Bootstrap 5.3 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

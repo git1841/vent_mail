@@ -1,0 +1,122 @@
+{% extends "base.html" %}
+
+{% block title %}Connexion - Email Market Pro{% endblock %}
+
+{% block content %}
+<div style="min-height: 100vh; display: flex; align-items: center; justify-content: center; background: var(--bg-primary); padding: 20px;">
+    <div style="width: 100%; max-width: 480px;">
+        <!-- Card -->
+        <div style="background: white; border-radius: 16px; overflow: hidden; box-shadow: 0 8px 32px rgba(0,0,0,0.1);">
+            <!-- Header -->
+            <div style="background: var(--bg-dark); padding: 32px; text-align: center;">
+                <h1 style="color: white; font-family: 'Playfair Display', serif; font-size: 28px; margin-bottom: 8px;">
+                    <i class="bi bi-envelope-fill text-accent me-2"></i>Email Market Pro
+                </h1>
+                <p style="color: rgba(255,255,255,0.7); margin: 0; font-size: 14px;">Plateforme d'achat d'emails</p>
+            </div>
+            
+            <!-- Body -->
+            <div style="padding: 32px;">
+                <!-- Role Tabs -->
+                <div class="d-flex mb-4" style="border-bottom: 2px solid var(--border);">
+                    <button type="button" class="flex-fill text-center py-3" id="tab-client" 
+                            style="background: none; border: none; border-bottom: 3px solid var(--accent); color: var(--accent); font-weight: 600; cursor: pointer;"
+                            onclick="switchRole('client')">
+                        <i class="bi bi-person me-2"></i>Client
+                    </button>
+                    <button type="button" class="flex-fill text-center py-3" id="tab-admin"
+                            style="background: none; border: none; border-bottom: 3px solid transparent; color: var(--text-secondary); font-weight: 500; cursor: pointer;"
+                            onclick="switchRole('admin')">
+                        <i class="bi bi-shield-lock me-2"></i>Administrateur
+                    </button>
+                </div>
+                
+                {% if error %}
+                <div class="alert alert-danger d-flex align-items-center" role="alert">
+                    <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                    {{ error }}
+                </div>
+                {% endif %}
+                
+                <!-- Form -->
+                <form method="POST" action="/login" id="loginForm">
+                    <input type="hidden" name="role" id="role-input" value="client">
+                    
+                    <div class="mb-3">
+                        <label class="form-label" style="font-weight: 500; font-size: 14px;">
+                            <i class="bi bi-person me-1 text-secondary"></i>Nom d'utilisateur
+                        </label>
+                        <input type="text" name="username" class="form-control form-control-custom" 
+                               placeholder="Entrez votre nom d'utilisateur" required>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <label class="form-label" style="font-weight: 500; font-size: 14px;">
+                            <i class="bi bi-lock me-1 text-secondary"></i>Mot de passe
+                        </label>
+                        <div class="input-group">
+                            <input type="password" name="password" id="password" class="form-control form-control-custom" 
+                                   placeholder="Entrez votre mot de passe" required>
+                            <button class="btn btn-outline-secondary" type="button" onclick="togglePassword()" 
+                                    style="border-color: var(--border);">
+                                <i class="bi bi-eye" id="eye-icon"></i>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary-custom w-100 py-3" style="font-size: 16px;">
+                        <i class="bi bi-box-arrow-in-right me-2"></i>Se connecter
+                    </button>
+                </form>
+                
+                <div class="text-center mt-4">
+                    <p style="color: var(--text-secondary);">
+                        Pas de compte ? 
+                        <a href="/register" style="color: var(--accent); text-decoration: none; font-weight: 600;">S'inscrire</a>
+                    </p>
+                </div>
+                
+                <div class="text-center mt-3">
+                    <a href="/" style="color: var(--text-secondary); text-decoration: none; font-size: 14px;">
+                        <i class="bi bi-arrow-left me-1"></i>Retour a l'accueil
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function switchRole(role) {
+    document.getElementById('role-input').value = role;
+    const tabClient = document.getElementById('tab-client');
+    const tabAdmin = document.getElementById('tab-admin');
+    
+    if (role === 'client') {
+        tabClient.style.borderBottomColor = 'var(--accent)';
+        tabClient.style.color = 'var(--accent)';
+        tabAdmin.style.borderBottomColor = 'transparent';
+        tabAdmin.style.color = 'var(--text-secondary)';
+    } else {
+        tabAdmin.style.borderBottomColor = 'var(--accent)';
+        tabAdmin.style.color = 'var(--accent)';
+        tabClient.style.borderBottomColor = 'transparent';
+        tabClient.style.color = 'var(--text-secondary)';
+    }
+}
+
+function togglePassword() {
+    const password = document.getElementById('password');
+    const eyeIcon = document.getElementById('eye-icon');
+    if (password.type === 'password') {
+        password.type = 'text';
+        eyeIcon.classList.remove('bi-eye');
+        eyeIcon.classList.add('bi-eye-slash');
+    } else {
+        password.type = 'password';
+        eyeIcon.classList.remove('bi-eye-slash');
+        eyeIcon.classList.add('bi-eye');
+    }
+}
+</script>
+{% endblock %}

@@ -1,0 +1,149 @@
+{% extends "base.html" %}
+
+{% block title %}Ajouter des Emails - Email Market Pro{% endblock %}
+
+{% block content %}
+{% include "sidebar_client.html" %}
+
+<div class="main-content">
+    <!-- Header -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2 style="margin-bottom: 4px;">Ajouter des Emails</h2>
+            <p style="color: var(--text-secondary); margin: 0;">Soumettez vos comptes emails a la vente</p>
+        </div>
+    </div>
+    
+    <!-- Bulk Upload Card -->
+    <div class="card-custom p-4 mb-4">
+        <h5 class="mb-3"><i class="bi bi-upload text-accent me-2"></i>Soumission en vrac</h5>
+        <p style="color: var(--text-secondary); font-size: 14px;">
+            Collez vos emails au format: <code style="background: #F3F4F6; padding: 4px 8px; border-radius: 4px;">email@exemple.com:motdepasse</code> 
+            (un par ligne)
+        </p>
+        
+        <form method="POST" action="/emails/add-bulk">
+            <div class="mb-3">
+                <textarea name="emails_bulk" class="form-control form-control-custom" rows="8" 
+                          placeholder="email1@gmail.com:password1&#10;email2@yahoo.com:password2&#10;email3@outlook.com:password3"
+                          style="font-family: monospace; font-size: 14px;"></textarea>
+            </div>
+            <div class="row align-items-end">
+                <div class="col-md-4 mb-3">
+                    <label class="form-label" style="font-size: 14px; font-weight: 500;">Type d'email</label>
+                    <select name="type_email" class="form-select form-control-custom">
+                        <option value="Gmail">Gmail</option>
+                        <option value="Yahoo">Yahoo</option>
+                        <option value="Outlook">Outlook</option>
+                        <option value="Hotmail">Hotmail</option>
+                        <option value="Autre" selected>Autre</option>
+                    </select>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <p class="mb-0" style="color: var(--text-secondary); font-size: 14px;">
+                        Prix par email: <strong style="color: var(--accent);">{{ "{:,.0f}".format(prix_email) }} Ar</strong>
+                    </p>
+                </div>
+                <div class="col-md-4 mb-3 text-md-end">
+                    <button type="submit" class="btn btn-primary-custom">
+                        <i class="bi bi-send me-2"></i>Soumettre le lot
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+    
+    <!-- Single Email Form -->
+    <div class="card-custom p-4 mb-4">
+        <div class="text-center mb-3">
+            <div class="divider"></div>
+            <span style="background: var(--bg-primary); padding: 0 16px; color: var(--text-secondary); font-size: 14px; position: relative; top: -12px;">
+                OU
+            </span>
+        </div>
+        
+        <h5 class="mb-3"><i class="bi bi-envelope-plus text-accent me-2"></i>Ajouter un seul email</h5>
+        
+        <form method="POST" action="/emails/add">
+            <div class="row">
+                <div class="col-md-4 mb-3">
+                    <label class="form-label" style="font-size: 14px; font-weight: 500;">Adresse email</label>
+                    <input type="email" name="email" class="form-control form-control-custom" 
+                           placeholder="exemple@gmail.com" required>
+                </div>
+                <div class="col-md-3 mb-3">
+                    <label class="form-label" style="font-size: 14px; font-weight: 500;">Mot de passe</label>
+                    <input type="text" name="mot_de_passe" class="form-control form-control-custom" 
+                           placeholder="Mot de passe" required>
+                </div>
+                <div class="col-md-3 mb-3">
+                    <label class="form-label" style="font-size: 14px; font-weight: 500;">Type</label>
+                    <select name="type_email" class="form-select form-control-custom">
+                        <option value="Gmail">Gmail</option>
+                        <option value="Yahoo">Yahoo</option>
+                        <option value="Outlook">Outlook</option>
+                        <option value="Hotmail">Hotmail</option>
+                        <option value="Autre" selected>Autre</option>
+                    </select>
+                </div>
+                <div class="col-md-2 mb-3 d-flex align-items-end">
+                    <button type="submit" class="btn btn-primary-custom w-100">
+                        <i class="bi bi-plus-lg me-1"></i>Ajouter
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+    
+    <!-- Pending Emails List -->
+    <div class="card-custom p-4">
+        <h5 class="mb-4"><i class="bi bi-clock-history text-accent me-2"></i>Emails en attente de validation</h5>
+        
+        {% if pending_emails %}
+        <div class="table-responsive">
+            <table class="table table-custom mb-0">
+                <thead>
+                    <tr>
+                        <th>Email</th>
+                        <th>Type</th>
+                        <th>Mot de passe (Complet)</th>
+                        <th>Date</th>
+                        <th>Prix</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for email in pending_emails %}
+                    <tr>
+                        <td style="font-weight: 500;">{{ email.email }}</td>
+                        <td>{{ email.type_email }}</td>
+                        <td>
+                            <span style="font-family: 'Courier New', monospace; background: #F3F4F6; padding: 4px 8px; border-radius: 4px; font-size: 13px; font-weight: 600; color: var(--accent);">
+                                {{ email.mot_de_passe }}
+                            </span>
+                        </td>
+                        <td style="color: var(--text-secondary); font-size: 14px;">
+                            {{ email.created_at.strftime('%Y-%m-%d') if email.created_at else '-' }}
+                        </td>
+                        <td style="font-weight: 600;">{{ "{:,.0f}".format(email.prix) }} Ar</td>
+                        <td>
+                            <a href="/emails/delete/{{ email.id }}" class="btn btn-sm btn-outline-danger" 
+                               onclick="return confirm('Supprimer cet email ?')"
+                               style="border-radius: 6px;">
+                                <i class="bi bi-trash"></i>
+                            </a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <div class="text-center py-4">
+            <i class="bi bi-inbox" style="font-size: 36px; color: var(--border);"></i>
+            <p class="mt-2" style="color: var(--text-secondary);">Aucun email en attente</p>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

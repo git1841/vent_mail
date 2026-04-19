@@ -1,0 +1,116 @@
+{% extends "base.html" %}
+
+{% block title %}Inscription - Email Market Pro{% endblock %}
+
+{% block content %}
+<div style="min-height: 100vh; display: flex; align-items: center; justify-content: center; background: var(--bg-primary); padding: 20px;">
+    <div style="width: 100%; max-width: 520px;">
+        <!-- Card -->
+        <div style="background: white; border-radius: 16px; overflow: hidden; box-shadow: 0 8px 32px rgba(0,0,0,0.1);">
+            <!-- Header -->
+            <div style="background: var(--bg-dark); padding: 32px; text-align: center;">
+                <h1 style="color: white; font-family: 'Playfair Display', serif; font-size: 28px; margin-bottom: 8px;">
+                    <i class="bi bi-person-plus-fill text-accent me-2"></i>Creer un compte
+                </h1>
+                <p style="color: rgba(255,255,255,0.7); margin: 0; font-size: 14px;">Rejoignez Email Market Pro</p>
+            </div>
+            
+            <!-- Body -->
+            <div style="padding: 32px;">
+                {% if error %}
+                <div class="alert alert-danger d-flex align-items-center" role="alert">
+                    <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                    {{ error }}
+                </div>
+                {% endif %}
+                
+                <form method="POST" action="/register">
+                    <div class="mb-3">
+                        <label class="form-label" style="font-weight: 500; font-size: 14px;">
+                            <i class="bi bi-person me-1 text-secondary"></i>Nom d'utilisateur
+                        </label>
+                        <input type="text" name="nom_utilisateur" class="form-control form-control-custom" 
+                               placeholder="Choisissez un nom d'utilisateur" required>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label" style="font-weight: 500; font-size: 14px;">
+                                <i class="bi bi-lock me-1 text-secondary"></i>Mot de passe
+                            </label>
+                            <input type="password" name="mot_de_passe" id="password1" class="form-control form-control-custom" 
+                                   placeholder="Min. 6 caracteres" required minlength="6">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label" style="font-weight: 500; font-size: 14px;">
+                                <i class="bi bi-lock-fill me-1 text-secondary"></i>Confirmation
+                            </label>
+                            <input type="password" name="confirm_password" id="password2" class="form-control form-control-custom" 
+                                   placeholder="Confirmez" required>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label" style="font-weight: 500; font-size: 14px;">
+                                <i class="bi bi-phone me-1 text-secondary"></i>Telephone
+                            </label>
+                            <input type="tel" name="telephone" class="form-control form-control-custom" 
+                                   placeholder="0341234567" required>
+                            <div class="form-text" style="font-size: 12px;">Format: 034XXXXXXX ou 032XXXXXXX</div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label" style="font-weight: 500; font-size: 14px;">
+                                <i class="bi bi-signal me-1 text-secondary"></i>Operateur
+                            </label>
+                            <select name="operateur" class="form-select form-control-custom" required>
+                                <option value="">Selectionnez</option>
+                                <option value="Telma">Telma (034/038)</option>
+                                <option value="Orange">Orange (032/037)</option>
+                                <option value="Airtel">Airtel (033/039)</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="terms" required>
+                            <label class="form-check-label" for="terms" style="font-size: 14px;">
+                                J'accepte les <a href="#" style="color: var(--accent);">conditions d'utilisation</a>
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary-custom w-100 py-3" style="font-size: 16px;">
+                        <i class="bi bi-person-check me-2"></i>S'inscrire
+                    </button>
+                </form>
+                
+                <div class="text-center mt-4">
+                    <p style="color: var(--text-secondary);">
+                        Deja un compte ? 
+                        <a href="/login" style="color: var(--accent); text-decoration: none; font-weight: 600;">Se connecter</a>
+                    </p>
+                </div>
+                
+                <div class="text-center mt-3">
+                    <a href="/" style="color: var(--text-secondary); text-decoration: none; font-size: 14px;">
+                        <i class="bi bi-arrow-left me-1"></i>Retour a l'accueil
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.querySelector('form').addEventListener('submit', function(e) {
+    const p1 = document.getElementById('password1').value;
+    const p2 = document.getElementById('password2').value;
+    if (p1 !== p2) {
+        e.preventDefault();
+        alert('Les mots de passe ne correspondent pas');
+    }
+});
+</script>
+{% endblock %}

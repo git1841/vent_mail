@@ -1,0 +1,210 @@
+{% extends "base.html" %}
+
+{% block title %}Tableau de Bord - Email Market Pro{% endblock %}
+
+{% block content %}
+{% include "sidebar_client.html" %}
+
+<div class="main-content">
+    <!-- Header -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2 style="margin-bottom: 4px;">Tableau de Bord</h2>
+            <p style="color: var(--text-secondary); margin: 0;">Bienvenue, {{ client.nom_utilisateur }}</p>
+        </div>
+        <div class="d-flex align-items-center gap-3">
+            <div style="background: white; padding: 10px 20px; border-radius: 1000px; box-shadow: 0 2px 8px rgba(0,0,0,0.06);">
+                <i class="bi bi-wallet2 text-accent me-2"></i>
+                <span style="font-weight: 600;">{{ "{:,.0f}".format(stats.solde) }} Ar</span>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Stats Cards -->
+    <div class="row mb-4">
+        <div class="col-md-3 col-6 mb-3">
+            <div class="stat-card">
+                <div class="d-flex justify-content-between align-items-start">
+                    <div>
+                        <p style="color: var(--text-secondary); font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px;">
+                            Solde
+                        </p>
+                        <h3 style="font-size: 28px; margin: 0;">{{ "{:,.0f}".format(stats.solde) }} Ar</h3>
+                    </div>
+                    <div class="stat-icon" style="background: rgba(232,106,51,0.1); color: var(--accent);">
+                        <i class="bi bi-wallet2"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 col-6 mb-3">
+            <div class="stat-card">
+                <div class="d-flex justify-content-between align-items-start">
+                    <div>
+                        <p style="color: var(--text-secondary); font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px;">
+                            Emails Vendus
+                        </p>
+                        <h3 style="font-size: 28px; margin: 0;">{{ stats.total_emails }}</h3>
+                    </div>
+                    <div class="stat-icon" style="background: rgba(16,185,129,0.1); color: var(--success);">
+                        <i class="bi bi-envelope-check"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 col-6 mb-3">
+            <div class="stat-card">
+                <div class="d-flex justify-content-between align-items-start">
+                    <div>
+                        <p style="color: var(--text-secondary); font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px;">
+                            En Attente
+                        </p>
+                        <h3 style="font-size: 28px; margin: 0;">{{ stats.en_attente }}</h3>
+                    </div>
+                    <div class="stat-icon" style="background: rgba(245,158,11,0.1); color: var(--warning);">
+                        <i class="bi bi-hourglass-split"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 col-6 mb-3">
+            <div class="stat-card">
+                <div class="d-flex justify-content-between align-items-start">
+                    <div>
+                        <p style="color: var(--text-secondary); font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px;">
+                            Payes
+                        </p>
+                        <h3 style="font-size: 28px; margin: 0;">{{ stats.payes }}</h3>
+                    </div>
+                    <div class="stat-icon" style="background: rgba(29,78,216,0.1); color: #1D4ED8;">
+                        <i class="bi bi-cash-stack"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="row">
+        <!-- Recent Emails -->
+        <div class="col-lg-8 mb-4">
+            <div class="card-custom p-4">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h4 style="margin: 0;">Mes Dernieres Soumissions</h4>
+                    <a href="/mes-emails" style="color: var(--accent); text-decoration: none; font-weight: 500; font-size: 14px;">
+                        Voir tout <i class="bi bi-arrow-right ms-1"></i>
+                    </a>
+                </div>
+                
+                {% if emails %}
+                <div class="table-responsive">
+                    <table class="table table-custom mb-0">
+                        <thead>
+                            <tr>
+                                <th>Email</th>
+                                <th>Type</th>
+                                <th>Date</th>
+                                <th>Statut</th>
+                                <th>Prix</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for email in emails %}
+                            <tr>
+                                <td style="font-weight: 500;">{{ email.email }}</td>
+                                <td>{{ email.type_email }}</td>
+                                <td style="color: var(--text-secondary); font-size: 14px;">
+                                    {{ email.created_at.strftime('%Y-%m-%d') if email.created_at else '-' }}
+                                </td>
+                                <td>
+                                    {% if email.statut == 'en_attente' %}
+                                        <span class="status-pill status-en_attente">
+                                            <i class="bi bi-hourglass-split"></i>En attente
+                                        </span>
+                                    {% elif email.statut == 'valide' %}
+                                        <span class="status-pill status-valide">
+                                            <i class="bi bi-check-circle"></i>Valide
+                                        </span>
+                                    {% elif email.statut == 'rejete' %}
+                                        <span class="status-pill status-rejete">
+                                            <i class="bi bi-x-circle"></i>Rejete
+                                        </span>
+                                    {% elif email.statut == 'paye' %}
+                                        <span class="status-pill status-paye">
+                                            <i class="bi bi-cash-coin"></i>Paye
+                                        </span>
+                                    {% endif %}
+                                </td>
+                                <td style="font-weight: 600;">{{ "{:,.0f}".format(email.prix) }} Ar</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% else %}
+                <div class="text-center py-5">
+                    <i class="bi bi-inbox" style="font-size: 48px; color: var(--border);"></i>
+                    <p class="mt-3" style="color: var(--text-secondary);">Aucun email soumis pour le moment</p>
+                    <a href="/emails/add" class="btn btn-primary-custom">
+                        <i class="bi bi-plus-lg me-2"></i>Ajouter un email
+                    </a>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+        
+        <!-- Right Column -->
+        <div class="col-lg-4">
+            <!-- Quick Actions -->
+            <div class="card-custom p-4 mb-4">
+                <h5 style="margin-bottom: 16px;">Actions rapides</h5>
+                <a href="/emails/add" class="btn btn-primary-custom w-100 mb-3">
+                    <i class="bi bi-plus-lg me-2"></i>Ajouter des emails
+                </a>
+                <a href="/mes-emails" class="btn btn-outline-custom w-100">
+                    <i class="bi bi-envelope me-2"></i>Voir mes emails
+                </a>
+            </div>
+            
+            <!-- Price Info -->
+            <div class="card-custom p-4 mb-4" style="background: var(--bg-dark); color: white;">
+                <div class="d-flex align-items-center mb-3">
+                    <div style="width: 48px; height: 48px; background: rgba(232,106,51,0.2); border-radius: 12px; display: flex; align-items: center; justify-content: center;">
+                        <i class="bi bi-tag" style="font-size: 24px; color: var(--accent);"></i>
+                    </div>
+                    <div class="ms-3">
+                        <p class="mb-0" style="color: rgba(255,255,255,0.6); font-size: 14px;">Prix actuel</p>
+                        <h4 class="mb-0" style="color: var(--accent);">{{ "{:,.0f}".format(prix_email) }} Ar</h4>
+                    </div>
+                </div>
+                <p class="mb-0" style="color: rgba(255,255,255,0.6); font-size: 14px;">
+                    Par email valide et paye
+                </p>
+            </div>
+            
+            <!-- Recent Transactions -->
+            <div class="card-custom p-4">
+                <h5 style="margin-bottom: 16px;">Transactions recentes</h5>
+                {% if transactions %}
+                    {% for tx in transactions %}
+                    <div class="d-flex justify-content-between align-items-center py-2" style="border-bottom: 1px solid var(--border);">
+                        <div>
+                            <p class="mb-0" style="font-size: 14px; font-weight: 500;">{{ tx.description }}</p>
+                            <p class="mb-0" style="font-size: 12px; color: var(--text-secondary);">
+                                {{ tx.created_at.strftime('%Y-%m-%d') if tx.created_at else '-' }}
+                            </p>
+                        </div>
+                        <span style="font-weight: 600; color: {% if tx.type == 'credit' %}var(--success){% else %}var(--danger){% endif %};">
+                            {% if tx.type == 'credit' %}+{% else %}-{% endif %}{{ "{:,.0f}".format(tx.montant) }} Ar
+                        </span>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <p style="color: var(--text-secondary); text-align: center; padding: 20px 0;">
+                        Aucune transaction
+                    </p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

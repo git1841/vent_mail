@@ -1,0 +1,46 @@
+<!-- Sidebar Admin -->
+<div class="sidebar" id="sidebar" style="background: var(--bg-dark); border-right: none;">
+    <div class="p-4">
+        <!-- Logo -->
+        <a href="/admin" style="text-decoration: none;">
+            <h4 style="font-family: 'Playfair Display', serif; color: white; margin: 0;">
+                <i class="bi bi-shield-lock text-accent me-2"></i>Admin
+            </h4>
+        </a>
+    </div>
+    
+    <nav class="nav flex-column mt-2">
+        <a class="nav-link {% if request.url.path == '/admin' %}active{% endif %}" href="/admin" 
+           style="color: rgba(255,255,255,0.7);">
+            <i class="bi bi-speedometer2"></i>
+            Tableau de Bord
+        </a>
+    </nav>
+    
+    <div style="position: absolute; bottom: 0; left: 0; right: 0; padding: 20px;">
+        <div class="divider" style="background: rgba(255,255,255,0.1);"></div>
+        <div class="d-flex align-items-center px-3 py-2" style="background: rgba(255,255,255,0.05); border-radius: 8px; margin-bottom: 12px;">
+            <i class="bi bi-shield-check" style="font-size: 32px; color: var(--accent);"></i>
+            <div class="ms-2">
+                <p class="mb-0" style="font-weight: 600; font-size: 14px; color: white;">{{ admin.nom }}</p>
+                <p class="mb-0" style="font-size: 12px; color: rgba(255,255,255,0.5);">Administrateur</p>
+            </div>
+        </div>
+        <a href="/logout" class="nav-link" style="color: var(--danger);">
+            <i class="bi bi-box-arrow-left"></i>
+            Deconnexion
+        </a>
+    </div>
+</div>
+
+<!-- Mobile Toggle -->
+<button class="btn btn-dark d-lg-none" type="button" onclick="toggleSidebar()" 
+        style="position: fixed; top: 16px; left: 16px; z-index: 1001; border-radius: 8px;">
+    <i class="bi bi-list"></i>
+</button>
+
+<script>
+function toggleSidebar() {
+    document.getElementById('sidebar').classList.toggle('show');
+}
+</script>

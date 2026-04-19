@@ -1,0 +1,61 @@
+<!-- Sidebar Client -->
+<div class="sidebar" id="sidebar">
+    <div class="p-4">
+        <!-- Logo -->
+        <a href="/" style="text-decoration: none;">
+            <h4 style="font-family: 'Playfair Display', serif; color: var(--bg-dark); margin: 0;">
+                <i class="bi bi-envelope-fill text-accent me-2"></i>Email Market
+            </h4>
+        </a>
+    </div>
+    
+    <nav class="nav flex-column mt-2">
+        <a class="nav-link {% if request.url.path == '/dashboard' %}active{% endif %}" href="/dashboard">
+            <i class="bi bi-speedometer2"></i>
+            Tableau de Bord
+        </a>
+        <a class="nav-link {% if request.url.path == '/emails/add' %}active{% endif %}" href="/emails/add">
+            <i class="bi bi-plus-circle"></i>
+            Ajouter des Emails
+        </a>
+        <a class="nav-link {% if request.url.path == '/mes-emails' %}active{% endif %}" href="/mes-emails">
+            <i class="bi bi-envelope"></i>
+            Mes Emails
+        </a>
+        <a class="nav-link {% if request.url.path == '/mon-compte' %}active{% endif %}" href="/mon-compte">
+            <i class="bi bi-person-circle"></i>
+            Mon Compte
+        </a>
+    </nav>
+    
+    <div style="position: absolute; bottom: 0; left: 0; right: 0; padding: 20px;">
+        <div class="divider"></div>
+        <div class="d-flex align-items-center px-3 py-2" style="background: #F9FAFB; border-radius: 8px; margin-bottom: 12px;">
+            <i class="bi bi-person-circle" style="font-size: 32px; color: var(--text-secondary);"></i>
+            <div class="ms-2" style="overflow: hidden;">
+                <p class="mb-0" style="font-weight: 600; font-size: 14px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                    {{ client.nom_utilisateur }}
+                </p>
+                <p class="mb-0" style="font-size: 12px; color: var(--text-secondary);">
+                    {{ "{:,.0f}".format(client.solde) }} Ar
+                </p>
+            </div>
+        </div>
+        <a href="/logout" class="nav-link" style="color: var(--danger);">
+            <i class="bi bi-box-arrow-left"></i>
+            Deconnexion
+        </a>
+    </div>
+</div>
+
+<!-- Mobile Toggle -->
+<button class="btn btn-dark d-lg-none" type="button" onclick="toggleSidebar()" 
+        style="position: fixed; top: 16px; left: 16px; z-index: 1001; border-radius: 8px;">
+    <i class="bi bi-list"></i>
+</button>
+
+<script>
+function toggleSidebar() {
+    document.getElementById('sidebar').classList.toggle('show');
+}
+</script>
