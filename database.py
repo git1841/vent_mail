@@ -8,12 +8,20 @@ from datetime import datetime
 from contextlib import contextmanager
 
 # Configuration MySQL - MODIFIEZ CES PARAMETRES SELON VOTRE SERVEUR
+# MYSQL_CONFIG = {
+#     "host": "localhost",       # Adresse du serveur MySQL
+#     "user": "root",            # Nom d'utilisateur MySQL
+#     "password": "",            # Mot de passe MySQL (vide par defaut sur XAMPP)
+#     "database": "email_market", # Nom de la base de donnees
+#     "port": 3306               # Port MySQL (3306 par defaut)
+# }
+
 MYSQL_CONFIG = {
-    "host": "localhost",       # Adresse du serveur MySQL
-    "user": "root",            # Nom d'utilisateur MySQL
-    "password": "",            # Mot de passe MySQL (vide par defaut sur XAMPP)
-    "database": "email_market", # Nom de la base de donnees
-    "port": 3306               # Port MySQL (3306 par defaut)
+    "host": "127.0.0.1",
+    "user": "appuser",
+    "password": "password",
+    "database": "email_market",
+    "port": 3307
 }
 
 def get_connection():
